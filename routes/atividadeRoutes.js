@@ -1,5 +1,5 @@
 const express = require('express');
-const Atividade = require('../models/atividadeModel');
+const Atividade = require('../models/atividade');
 const router = express.Router();
 
 // Rota para salvar a atividade
