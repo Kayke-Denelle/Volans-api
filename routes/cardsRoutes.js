@@ -1,5 +1,5 @@
 const express = require('express');
-const { createCard, getCards, updateCard, deleteCard } = require('../controllers/cardsControllers');
+const { createCard, getCards, updateCard, deleteCard, updateCardDifficulty } = require('../controllers/cardsControllers');
 const auth = require('../midleware/auth');
 const router = express.Router();
 
