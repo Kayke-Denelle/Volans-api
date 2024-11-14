@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
 
-const atividadeSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, required: true },
-  cartaId: { type: mongoose.Schema.Types.ObjectId, required: true },
-  dificuldade: { type: String, enum: ['facil', 'medio', 'dificil'], required: true },
-  data: { type: Date, default: Date.now }
+const cardSchema = new mongoose.Schema({
+  question: { type: String, required: true },
+  answer: { type: String, required: true },
+  deckId: { type: mongoose.Schema.Types.ObjectId, ref: 'Deck', required: true },
+  difficulty: { type: String, enum: ['easy', 'medium', 'hard'], default: 'medium' }, // Dificuldade
+  lastReviewed: { type: Date }, // Data da última revisão
 });
 
-module.exports = mongoose.model('Atividade', atividadeSchema);
+module.exports = mongoose.model('Card', cardSchema);

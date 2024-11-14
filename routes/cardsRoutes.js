@@ -30,6 +30,8 @@ router.put('/:cardId', auth, updateCard);
 
 // Rota para excluir um cartão específico (DELETE)
 router.delete('/:cardId', auth, deleteCard);
+
+router.patch('/:cardId/difficulty', auth, updateCardDifficulty);
   
 
 module.exports = router;

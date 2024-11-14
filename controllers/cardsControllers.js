@@ -51,5 +51,26 @@ const deleteCard = async (req, res) => {
   }
 };
 
+const updateCardDifficulty = async (req, res) => {
+  const { cardId } = req.params;
+  const { difficulty } = req.body;
 
-module.exports = { createCard, getCards, deleteCard, updateCard };
+  try {
+    const card = await Card.findByIdAndUpdate(
+      cardId,
+      { difficulty, lastReviewed: new Date() },
+      { new: true }
+    );
+
+    if (!card) {
+      return res.status(404).json({ message: 'Cartão não encontrado' });
+    }
+
+    res.status(200).json(card);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+
+module.exports = { createCard, getCards, deleteCard, updateCard, updateCardDifficulty };
