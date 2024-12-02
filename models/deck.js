@@ -14,7 +14,6 @@ const deckSchema = new mongoose.Schema({
   revisionDates: [Date], // Array para armazenar as datas de revisão
 });
 
-module.exports = mongoose.model('Deck', deckSchema);
+const Deck = mongoose.model('Deck', deckSchema);
 module.exports = Deck;
-
 
