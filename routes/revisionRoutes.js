@@ -1,6 +1,6 @@
 const express = require('express');
 const Revision = require('../models/revision');
-const authMiddleware = require('../middleware/authMiddleware');
+const authMiddleware = require('../midleware/auth');
 const router = express.Router();
 
 // Salvar revisão
