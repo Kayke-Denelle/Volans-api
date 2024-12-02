@@ -1,12 +1,11 @@
+// models/revision.js
 const mongoose = require('mongoose');
 
-const RevisionSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  deckId: { type: mongoose.Schema.Types.ObjectId, ref: 'Deck', required: true },
-  date: { type: Date, default: Date.now },
-  easyCount: { type: Number, default: 0 },
-  mediumCount: { type: Number, default: 0 },
-  hardCount: { type: Number, default: 0 },
+const revisionSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'User' },
+  cardId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Card' },
+  deckId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Deck' },
+  date: { type: Date, default: Date.now }, // Data da revisão
 });
 
-module.exports = mongoose.model('Revision', RevisionSchema);
+module.exports = mongoose.model('Revision', revisionSchema);

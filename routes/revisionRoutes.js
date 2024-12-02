@@ -1,27 +1,36 @@
+// routes/revisionRoutes.js
 const express = require('express');
 const Revision = require('../models/revision');
+const mongoose = require('mongoose');
 const router = express.Router();
 
-// Salvar revisão
-router.post('/revisions', async (req, res) => {
-  try {
-    const { userId, deckId, easyCount, mediumCount, hardCount } = req.body;
-    const revision = new Revision({ userId, deckId, easyCount, mediumCount, hardCount });
-    await revision.save();
-    res.status(201).json({ message: 'Revisão salva com sucesso!' });
-  } catch (error) {
-    res.status(500).json({ error: 'Erro ao salvar revisão.' });
-  }
-});
-
-// Obter revisões
-router.get('/revisions', async (req, res) => {
+// Endpoint para resumo semanal
+router.get('/weekly-summary', async (req, res) => {
   try {
     const { userId } = req.query;
-    const revisions = await Revision.find({ userId }).sort({ date: 1 });
+
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+    const revisions = await Revision.aggregate([
+      {
+        $match: {
+          userId: mongoose.Types.ObjectId(userId),
+          date: { $gte: sevenDaysAgo },
+        },
+      },
+      {
+        $group: {
+          _id: { $dateToString: { format: '%Y-%m-%d', date: '$date' } },
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { _id: 1 } },
+    ]);
+
     res.json(revisions);
   } catch (error) {
-    res.status(500).json({ error: 'Erro ao buscar revisões.' });
+    res.status(500).json({ error: 'Erro ao buscar resumo semanal.' });
   }
 });
 
