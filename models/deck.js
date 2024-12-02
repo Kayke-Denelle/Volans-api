@@ -7,8 +7,16 @@ const deckSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
-  lastReviewed: Date, // Última data de revisão
-  reviewCount: { type: Map, of: Number, default: {} }, // Contagem de revisões por dia (ex: "2024-12-01": 5)
+  lastReviewed: {
+    type: Date,
+    default: null,
+  },
+  reviewCount: {
+    type: Map,
+    of: Number,
+    default: {},
+  },
 });
 
-module.exports = mongoose.model('Deck', deckSchema);
+const Deck = mongoose.model('Deck', deckSchema);
+module.exports = Deck;
