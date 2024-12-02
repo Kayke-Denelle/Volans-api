@@ -1,21 +1,22 @@
 const jwt = require('jsonwebtoken');
+const User = require('../models/user'); // Model de usuário, se necessário.
 
-const auth = (req, res, next) => {
-  const token = req.header('Authorization');
+const authMiddleware = async (req, res, next) => {
+  const authHeader = req.headers.authorization;
 
-  if (!token) {
-    return res.status(401).json({ message: 'Acesso negado, token não fornecido.' });
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ error: 'Token não fornecido ou inválido.' });
   }
 
-  const tokenWithoutBearer = token.replace('Bearer ', '');
+  const token = authHeader.split(' ')[1];
 
   try {
-    const decoded = jwt.verify(tokenWithoutBearer, process.env.JWT_SECRET);
-    req.user = decoded;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET); // Substitua pelo seu segredo JWT
+    req.userId = decoded.id; // Assume que o ID do usuário está no payload do token
     next();
   } catch (error) {
-    res.status(400).json({ message: 'Token inválido' });
+    return res.status(401).json({ error: 'Token inválido.' });
   }
 };
 
-module.exports = auth;
+module.exports = authMiddleware;
