@@ -1,6 +1,6 @@
 const express = require('express');
 const { createDeck, getDecks, getDeckById } = require('../controllers/deckControllers');
-const auth = require('../middleware/auth'); // Corrected the spelling of 'middleware'
+const auth = require('../midleware/auth'); // Corrected the spelling of 'middleware'
 const router = express.Router();
 
 // Import the necessary controller for handling reviews
