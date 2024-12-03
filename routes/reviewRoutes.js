@@ -3,7 +3,7 @@ const Review = require('../models/review'); // Modelo de revisão
 const router = express.Router();
 
 // Incrementar revisões de um usuário
-router.post('/api/revisoes', async (req, res) => {
+router.post('/', async (req, res) => {
   const { userId } = req.body;
 
   try {
@@ -22,7 +22,7 @@ router.post('/api/revisoes', async (req, res) => {
 });
 
 // Obter revisões de um usuário
-router.get('/api/revisoes/:userId', async (req, res) => {
+router.get('/:userId', async (req, res) => {
   const { userId } = req.params;
 
   try {
