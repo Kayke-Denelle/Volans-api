@@ -14,7 +14,7 @@ router.patch('/api/baralhos/:deckId/revisao', auth, async (req, res) => {
   const { deckId } = req.params;
 
   try {
-    const deck = await Deck.findById(deckId);
+    const deck = await deck.findById(deckId);
     if (!deck) return res.status(404).json({ message: 'Baralho não encontrado.' });
 
     const today = new Date().toISOString().split('T')[0]; // Format "YYYY-MM-DD"
@@ -36,7 +36,7 @@ router.get('/api/baralhos/:deckId/revisoes', async (req, res) => {
     const { deckId } = req.params;
   
     try {
-      const deck = await Deck.findById(deckId);
+      const deck = await deck.findById(deckId);
       if (!deck) return res.status(404).json({ message: 'Baralho não encontrado.' });
   
       const today = new Date();
