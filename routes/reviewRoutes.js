@@ -36,27 +36,19 @@ router.post('/', async (req, res) => {
 router.get('/:userId', async (req, res) => {
     const { userId } = req.params;
 
-  try {
-    // Buscar revisões feitas no banco, agrupando por mês e ano
-    const reviews = await Review.aggregate([
-      { $match: { userId: mongoose.Types.ObjectId(userId) } },
-      { $project: { month: { $month: "$createdAt" }, year: { $year: "$createdAt" } } },
-      { $group: { _id: { month: "$month", year: "$year" }, count: { $sum: 1 } } },
-      { $sort: { "_id.year": -1, "_id.month": -1 } }, // Ordena para o gráfico exibir do mais recente para o mais antigo
-    ]);
-
-    // Formatar para um formato mais amigável
-    const reviewsPerMonth = reviews.map(review => ({
-      month: review._id.month,
-      year: review._id.year,
-      count: review.count
-    }));
-
-    res.json({ reviewsPerMonth });
-  } catch (error) {
-    console.error('Erro ao buscar revisões:', error);
-    res.status(500).json({ error: 'Erro ao buscar revisões.' });
-  }
+    try {
+      const review = await Review.findOne({ userId });
+  
+      if (!review) {
+        return res.status(404).json({ message: 'Nenhuma revisão encontrada para este usuário.' });
+      }
+  
+      // A resposta agora inclui as revisões por mês
+      res.json({ reviewsPerMonth: review.reviewsPerMonth });
+    } catch (error) {
+      console.error('Erro ao buscar revisões:', error);
+      res.status(500).json({ error: 'Erro ao buscar revisões.' });
+    }
 });
 
 module.exports = router;
