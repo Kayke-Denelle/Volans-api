@@ -1,22 +1,24 @@
 const mongoose = require('mongoose');
 
 const deckSchema = new mongoose.Schema({
-  name: { type: String, required: true },
+  name: {
+    type: String,
+    required: true
+  },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    ref: 'User ',
     required: true
+  },
+  reviewCounts: {
+    type: Map,
+    of: Number,
+    default: {},
   },
   lastReviewed: {
     type: Date,
     default: null,
   },
-  reviewCount: {
-    type: Map,
-    of: Number,
-    default: {},
-  },
 });
 
-const Deck = mongoose.model('Deck', deckSchema);
-module.exports = Deck;
+module.exports = mongoose.model('Deck', deckSchema);
