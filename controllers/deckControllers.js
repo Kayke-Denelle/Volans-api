@@ -81,12 +81,13 @@ const updateDeck = async (req, res) => {
 };
 
 // Função para deletar um baralho
+// Função para deletar um baralho
 const deleteDeck = async (req, res) => {
   const { deckId } = req.params;  // Captura o deckId da URL
   const userId = req.user.userId;  // O userId vem do middleware auth
 
   try {
-    // Busca o baralho pelo ID e exclui diretamente
+    // Busca o baralho pelo ID
     const deck = await Deck.findById(deckId);
 
     if (!deck) {
@@ -98,7 +99,15 @@ const deleteDeck = async (req, res) => {
       return res.status(403).json({ message: 'Você não tem permissão para excluir este baralho' });
     }
 
-    // Deleta o baralho
+    // Verifica se o baralho contém cartas
+    const cards = await Card.find({ deckId }); // Supondo que 'Card' seja o modelo de cartas e o 'deckId' seja a referência
+
+    if (cards.length > 0) {
+      // Caso o baralho tenha cartas, retornar uma mensagem de alerta
+      return res.status(400).json({ message: 'Este baralho contém cartas. Deseja excluir as cartas também?' });
+    }
+
+    // Deleta o baralho se não tiver cartas
     await Deck.findByIdAndDelete(deckId);
 
     res.status(200).json({ message: 'Deck excluído com sucesso' });
@@ -107,10 +116,30 @@ const deleteDeck = async (req, res) => {
   }
 };
 
+// Endpoint para verificar se o baralho contém cartas
+const verifyCardsInDeck = async (req, res) => {
+  const { deckId } = req.params;  // Captura o deckId da URL
+
+  try {
+    // Verifica se o baralho contém cartas
+    const cards = await Card.find({ deckId });
+
+    if (cards.length > 0) {
+      return res.status(200).json({ message: 'Este baralho contém cartas. Deseja excluir as cartas também?' });
+    }
+
+    res.status(200).json({ message: 'Este baralho não contém cartas.' });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+
 module.exports = {
   createDeck,
   getDecks,
   getDeckById,
   updateDeck,  // Exportando a função de atualização
-  deleteDeck,  // Exportando a função de exclusão
+  deleteDeck,
+  verifyCardsInDeck  // Exportando a função de exclusão
 };
