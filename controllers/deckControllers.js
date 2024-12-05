@@ -86,7 +86,7 @@ const deleteDeck = async (req, res) => {
   const userId = req.user.userId;  // O userId vem do middleware auth
 
   try {
-    // Busca o baralho pelo ID e exclui diretamente
+    // Busca o baralho pelo ID
     const deck = await Deck.findById(deckId);
 
     if (!deck) {
@@ -99,7 +99,7 @@ const deleteDeck = async (req, res) => {
     }
 
     // Deleta o baralho
-    await Deck.findByIdAndDelete(deckId);
+    await deck.remove();
 
     res.status(200).json({ message: 'Deck excluído com sucesso' });
   } catch (error) {
