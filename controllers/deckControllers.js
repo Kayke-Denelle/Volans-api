@@ -99,7 +99,7 @@ const deleteDeck = async (req, res) => {
     }
 
     // Deleta o baralho
-    await deck.remove();
+    await deck.deleteOne();
 
     res.status(200).json({ message: 'Deck excluído com sucesso' });
   } catch (error) {
